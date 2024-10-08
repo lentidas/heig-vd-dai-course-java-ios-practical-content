@@ -13,13 +13,25 @@ public class BinaryFileReader implements Readable {
 
   @Override
   public void read(String filename) {
-    try (InputStream fileInputStream = new FileInputStream(filename)) {
+    InputStream fileInputStream = null;
+
+    try {
+      fileInputStream = new FileInputStream(filename);
+
       int readByte;
       while ((readByte = fileInputStream.read()) != -1) {
         System.out.println(readByte);
       }
     } catch (IOException e) {
       e.printStackTrace();
+    } finally {
+      if (fileInputStream != null) {
+        try {
+          fileInputStream.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
     }
   }
 }

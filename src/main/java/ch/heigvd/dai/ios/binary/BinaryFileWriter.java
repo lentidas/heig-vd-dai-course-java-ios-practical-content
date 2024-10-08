@@ -13,7 +13,11 @@ public class BinaryFileWriter implements Writable {
 
   @Override
   public void write(String filename, int sizeInBytes) {
-    try (OutputStream fileOutputStream = new FileOutputStream(filename)) {
+    OutputStream fileOutputStream = null;
+
+    try {
+      fileOutputStream = new FileOutputStream(filename);
+
       /*
       Personal note after trying to understand what this write() does:
       We are writing a byte (8 bits) every time, although we are working with int, which are 4 bytes long.
@@ -27,6 +31,14 @@ public class BinaryFileWriter implements Writable {
       // fos.write(0b1100000100010001);
     } catch (IOException e) {
       e.printStackTrace();
+    } finally {
+      if (fileOutputStream != null) {
+        try {
+          fileOutputStream.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
     }
   }
 }

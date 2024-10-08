@@ -12,13 +12,25 @@ public class TextFileReader implements Readable {
 
   @Override
   public void read(String filename) {
-    try (Reader fis = new FileReader(filename, StandardCharsets.US_ASCII)) {
+    Reader fileReader = null;
+
+    try {
+      fileReader = new FileReader(filename, StandardCharsets.US_ASCII);
+
       int readByte;
-      while ((readByte = fis.read()) != -1) {
+      while ((readByte = fileReader.read()) != -1) {
         System.out.println(readByte);
       }
     } catch (IOException e) {
       e.printStackTrace();
+    } finally {
+      if (fileReader != null) {
+        try {
+          fileReader.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
     }
   }
 }
